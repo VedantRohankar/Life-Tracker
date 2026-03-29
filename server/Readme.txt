@@ -7,4 +7,6 @@ dotenv:	Store secrets
 bcryptjs:	Hash passwords
 jsonwebtoken:	Login authentication
 nodemon:	Auto-restart server
+Install Cloudinary backend deps:
+npm install cloudinary multer multer-storage-cloudinary
 -------------------------------------------------------

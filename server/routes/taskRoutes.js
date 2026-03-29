@@ -7,7 +7,8 @@ import { calculateLevel, getRank } from "../utils/xpUtils.js";
 const router = express.Router();
 
 
-// 🟢 GET all tasks (AUTO RESET DAILY)
+
+
 router.get("/", authMiddleware, async (req, res) => {
   try {
     const tasks = await Task.find({ userId: req.user.id });
@@ -15,11 +16,14 @@ router.get("/", authMiddleware, async (req, res) => {
     const today = new Date().toDateString();
 
     for (let task of tasks) {
+      // 🔥 RESET LOGIC (FINAL FIX)
       if (
+        task.completed &&
         task.lastCompletedDate &&
         new Date(task.lastCompletedDate).toDateString() !== today
       ) {
         task.completed = false;
+        task.lastCompletedDate = null; // IMPORTANT
         await task.save();
       }
     }
@@ -60,29 +64,58 @@ router.put("/:id", authMiddleware, async (req, res) => {
 
     if (!task) return res.status(404).json({ msg: "Task not found" });
 
+    const today = new Date().toDateString();
     const wasCompleted = task.completed;
+
+    // 🔄 TOGGLE
     task.completed = !task.completed;
 
-    console.log("Before XP:", user.xp);
-
-    // 🎮 XP + DATE LOGIC
+    // ✅ COMPLETE TASK
     if (!wasCompleted && task.completed) {
       user.xp += task.xpValue;
-      task.lastCompletedDate = new Date(); // ✅ store date
-    } else {
+
+      // 🔥 SET TODAY DATE
+      task.lastCompletedDate = new Date();
+
+      // 🔥 ADD TO STREAK
+      const alreadyDoneToday = task.completedDates.some(
+        (date) => new Date(date).toDateString() === today
+      );
+
+      if (!alreadyDoneToday) {
+        task.completedDates.push(new Date());
+      }
+
+    } 
+    // ❌ UNCHECK TASK
+    else {
       user.xp -= task.xpValue;
       task.lastCompletedDate = null;
     }
 
     if (user.xp < 0) user.xp = 0;
 
+    // 📊 XP HISTORY (GRAPH FIX)
+    const existingEntry = user.xpHistory.find(
+      (entry) =>
+        new Date(entry.date).toDateString() === today
+    );
+
+    if (existingEntry) {
+      existingEntry.xp = user.xp;
+    } else {
+      user.xpHistory.push({
+        date: new Date(),
+        xp: user.xp
+      });
+    }
+
+    // 📈 LEVEL + RANK
     user.level = calculateLevel(user.xp);
     user.rank = getRank(user.level);
 
     await task.save();
     await user.save();
-
-    console.log("After XP:", user.xp);
 
     res.json({ task, user });
 
@@ -103,5 +136,54 @@ router.delete("/:id", authMiddleware, async (req, res) => {
   }
 });
 
+// // 🟢 GET all tasks (AUTO RESET DAILY)--FOR RESETTING 
+// router.get("/reset-all", async (req, res) => {
+//   await Task.updateMany({}, {
+//     completed: false,
+//     lastCompletedDate: null
+//   });
+
+//   res.send("All tasks reset");
+// });
+
+// 📊 STREAK
+router.get("/streak", authMiddleware, async (req, res) => {
+  try {
+    const tasks = await Task.find({ userId: req.user.id });
+
+    let allDates = [];
+
+    tasks.forEach(task => {
+      allDates = [...allDates, ...task.completedDates];
+    });
+
+    const uniqueDates = [
+      ...new Set(allDates.map(d => new Date(d).toDateString()))
+    ];
+
+    uniqueDates.sort((a, b) => new Date(b) - new Date(a));
+
+    let streak = 0;
+    let currentDate = new Date();
+
+    for (let date of uniqueDates) {
+      if (
+        new Date(date).toDateString() ===
+        currentDate.toDateString()
+      ) {
+        streak++;
+        currentDate.setDate(currentDate.getDate() - 1);
+      } else {
+        break;
+      }
+    }
+
+    res.json({ streak, dates: uniqueDates });
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 export default router;
+

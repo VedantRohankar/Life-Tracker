@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Sidebar from "../components/Sidebar";
+import { motion } from "framer-motion";
 
 const Daily = () => {
   const [tasks, setTasks] = useState([]);
@@ -7,152 +9,136 @@ const Daily = () => {
 
   const token = localStorage.getItem("token");
 
-  // 🟢 Fetch Tasks
   const fetchTasks = async () => {
-    try {
-      const res = await axios.get(
-        "http://localhost:5000/api/tasks",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      );
+    const res = await axios.get("http://localhost:5000/api/tasks", {
+      headers: { Authorization: `Bearer ${token}` }
+    });
 
-      setTasks(res.data);
-
-    } catch (err) {
-      console.log("Error fetching tasks:", err);
-    }
+    setTasks(res.data);
   };
 
-  // 🔄 Load tasks on page load
   useEffect(() => {
     fetchTasks();
   }, []);
 
-  // ➕ Add Task
   const addTask = async () => {
     if (!title.trim()) return;
 
-    try {
-      await axios.post(
-        "http://localhost:5000/api/tasks",
-        { title },
-        {
-          headers: { Authorization: `Bearer ${token}` }
-        }
-      );
+    await axios.post(
+      "http://localhost:5000/api/tasks",
+      { title },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
 
-      setTitle("");
-      fetchTasks();
-
-    } catch (err) {
-      console.log("Error adding task:", err);
-    }
+    setTitle("");
+    fetchTasks();
   };
 
-  // ✅ Toggle Complete
   const toggleTask = async (id) => {
-    try {
-      await axios.put(
-        `http://localhost:5000/api/tasks/${id}`,
-        {},
-        {
-          headers: { Authorization: `Bearer ${token}` }
-        }
-      );
+    await axios.put(
+      `http://localhost:5000/api/tasks/${id}`,
+      {},
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
 
-      fetchTasks();
-
-    } catch (err) {
-      console.log("Error toggling task:", err);
-    }
+    fetchTasks();
   };
 
-  // ❌ Delete Task
   const deleteTask = async (id) => {
-    try {
-      await axios.delete(
-        `http://localhost:5000/api/tasks/${id}`,
-        {
-          headers: { Authorization: `Bearer ${token}` }
-        }
-      );
+    await axios.delete(
+      `http://localhost:5000/api/tasks/${id}`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
 
-      fetchTasks();
-
-    } catch (err) {
-      console.log("Error deleting task:", err);
-    }
+    fetchTasks();
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
+    <div className="flex">
+      <Sidebar />
 
-      {/* 🧠 Title */}
-      <h1 className="text-2xl font-bold mb-6">Daily Tasks 📋</h1>
+      <div className="md:ml-64 w-full min-h-screen bg-[#0f0f0f] p-6 text-white">
 
-      {/* ➕ Add Task */}
-      <div className="flex gap-2 mb-6">
-        <input
-          type="text"
-          placeholder="Enter new task..."
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="flex-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
+        <h1 className="text-3xl font-bold mb-1 tracking-tight">
+          📋 Daily Tasks
+        </h1>
+        <p className="text-gray-500 mb-6">
+          Complete tasks to earn XP ⚡
+        </p>
 
-        <button
-          onClick={addTask}
-          className="bg-green-500 text-white px-4 rounded hover:bg-green-600 transition"
-        >
-          Add
-        </button>
-      </div>
+        <div className="flex gap-3 mb-6">
+          <input
+            type="text"
+            placeholder="Enter new task..."
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="flex-1 p-3 bg-[#18181b] border border-[#27272a] 
+            rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
+          />
 
-      {/* 📋 Task List */}
-      <div className="space-y-3">
-        {tasks.length === 0 ? (
-          <p className="text-gray-500">No tasks yet</p>
-        ) : (
-          tasks.map((task) => (
-            <div
-              key={task._id}
-              className="bg-white p-4 rounded-xl shadow flex justify-between items-center hover:shadow-md transition"
-            >
-              {/* Task Title */}
-              <span
-                onClick={() => toggleTask(task._id)}
-                className={`cursor-pointer ${
-                  task.completed
-                    ? "line-through text-gray-400"
-                    : "text-black"
-                }`}
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={addTask}
+            className="bg-green-500 px-5 rounded-xl font-semibold 
+            shadow-md shadow-green-500/30"
+          >
+            Add
+          </motion.button>
+        </div>
+
+        <div className="space-y-3">
+          {tasks.length === 0 ? (
+            <p className="text-gray-500 text-center mt-10">
+              No tasks yet 🚀 Start by adding one!
+            </p>
+          ) : (
+            tasks.map((task) => (
+              <motion.div
+                key={task._id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                whileHover={{ scale: 1.02 }}
+                className="bg-[#18181b] border border-[#27272a] 
+                p-4 rounded-2xl flex justify-between items-center
+                shadow-md hover:shadow-green-500/10 transition-all"
               >
-                {task.title}
-              </span>
-
-              {/* Buttons */}
-              <div className="flex gap-3 items-center">
-                <span className="text-sm text-gray-500">
-                  +{task.xpValue} XP
+                <span
+                  onClick={() => toggleTask(task._id)}
+                  className={`cursor-pointer text-lg ${
+                    task.completed
+                      ? "line-through text-gray-500"
+                      : "text-white"
+                  }`}
+                >
+                  {task.title}
                 </span>
 
-                <button
-                  onClick={() => deleteTask(task._id)}
-                  className="text-red-500 hover:text-red-700"
-                >
-                  ❌
-                </button>
-              </div>
-            </div>
-          ))
-        )}
-      </div>
+                <div className="flex gap-3 items-center">
 
+                  <span className="text-xs bg-green-500/20 text-green-400 px-3 py-1 rounded-full">
+                    +{task.xpValue} XP
+                  </span>
+
+                  <motion.button
+                    whileHover={{ scale: 1.2 }}
+                    whileTap={{ scale: 0.8 }}
+                    onClick={() => deleteTask(task._id)}
+                    className="text-red-400 hover:text-red-600"
+                  >
+                    ✖
+                  </motion.button>
+
+                </div>
+              </motion.div>
+            ))
+          )}
+        </div>
+
+      </div>
     </div>
   );
 };
 
 export default Daily;
+

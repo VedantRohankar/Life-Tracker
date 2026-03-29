@@ -27,7 +27,20 @@ const userSchema = new mongoose.Schema({
   rank: {
     type: String,
     default: "Beginner"
-  }
+  },
+  avatar: {
+  type: String,
+  default: ""
+},
+  xpHistory: {
+  type: [
+    {
+      date: String,
+      xp: Number
+    }
+  ],
+  default: []
+}
 }, { timestamps: true });
 
 export default mongoose.model("User", userSchema);

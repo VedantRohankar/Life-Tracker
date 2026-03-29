@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Sidebar from "../components/Sidebar";
 import { motion } from "framer-motion";
+import API from "../api";
+
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -13,7 +15,7 @@ const Profile = () => {
 
   const fetchUser = async () => {
     const res = await axios.get(
-      "http://localhost:5000/api/user/profile",
+      `${API}/api/user/profile`,
       {
         headers: { Authorization: `Bearer ${token}` }
       }

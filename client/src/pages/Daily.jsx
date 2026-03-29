@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Sidebar from "../components/Sidebar";
 import { motion } from "framer-motion";
+import API from "../api";
+
 
 const Daily = () => {
   const [tasks, setTasks] = useState([]);
@@ -10,7 +12,7 @@ const Daily = () => {
   const token = localStorage.getItem("token");
 
   const fetchTasks = async () => {
-    const res = await axios.get("http://localhost:5000/api/tasks", {
+    const res = await axios.get(`${API}/api/tasks`, {
       headers: { Authorization: `Bearer ${token}` }
     });
 

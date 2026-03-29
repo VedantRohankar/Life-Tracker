@@ -2,6 +2,8 @@ import Sidebar from "../components/Sidebar";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
+import API from "../api";
+
 
 const Progress = () => {
   const [user, setUser] = useState(null);
@@ -9,7 +11,7 @@ const Progress = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    axios.get("http://localhost:5000/api/user/profile", {
+    axios.get(`${API}/api/user/profile`, {
       headers: { Authorization: `Bearer ${token}` }
     }).then(res => setUser(res.data));
   }, []);

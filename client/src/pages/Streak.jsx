@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Sidebar from "../components/Sidebar";
 import { motion } from "framer-motion";
+import API from "../api";
+
 
 const Streak = () => {
   const [streakData, setStreakData] = useState([]);
@@ -12,7 +14,7 @@ const Streak = () => {
       const token = localStorage.getItem("token");
 
       const res = await axios.get(
-        "http://localhost:5000/api/tasks/streak",
+        `${API}/api/tasks/streak`,
         {
           headers: { Authorization: `Bearer ${token}` }
         }

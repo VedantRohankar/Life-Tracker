@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
 import Sidebar from "../components/Sidebar";
+import API from "../api";
 
 import {
   LineChart,
@@ -20,7 +21,7 @@ const Dashboard = () => {
       const token = localStorage.getItem("token");
 
       const res = await axios.get(
-        "http://localhost:5000/api/user/profile",
+        `${API}/api/user/profile`,
         {
           headers: { Authorization: `Bearer ${token}` }
         }

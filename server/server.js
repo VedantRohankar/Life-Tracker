@@ -14,9 +14,10 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: "https://your-app.vercel.app",
+  origin: true,
   credentials: true
 }));
+
 
 app.use(express.json());
 //Connect Routes

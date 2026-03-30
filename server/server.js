@@ -14,12 +14,10 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "https://life-tracker-phkrykdth-vedantrohankars-projects.vercel.app"
-  ],
+  origin: true,
   credentials: true
 }));
+
 
 
 

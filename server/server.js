@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
-
+import uploadRoutes from "./routes/uploadRoutes.js";
 
 
 dotenv.config();
@@ -26,7 +26,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/tasks", taskRoutes);
-
+app.use("/api/upload", uploadRoutes);
 
 // Test Route
 app.get("/", (req, res) => {

@@ -28,24 +28,26 @@ const Profile = () => {
 
   // 🖼 Upload Avatar
   const handleUpload = async () => {
-    if (!image) return;
+  if (!image) return;
 
-    const formData = new FormData();
-    formData.append("avatar", image);
+  const formData = new FormData();
+  formData.append("image", image); // FIXED
 
-    try {
-      await axios.put(`${API}/api/user/upload-avatar`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+  try {
+    await axios.put(`${API}/api/user/upload-avatar`, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data"
+      }
+    });
 
-      setImage(null);
-      fetchUser();
-    } catch (err) {
-      console.log("Upload error:", err);
-    }
-  };
+    setImage(null);
+    fetchUser();
+  } catch (err) {
+    console.log("Upload error:", err);
+  }
+};
+
 
   // ✏️ Update Name
   const handleNameUpdate = async () => {

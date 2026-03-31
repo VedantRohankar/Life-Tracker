@@ -24,36 +24,37 @@ const Daily = () => {
   }, []);
 
   const addTask = async () => {
-    if (!title.trim()) return;
+  if (!title.trim()) return;
 
-    await axios.post(
-      "http://localhost:5000/api/tasks",
-      { title },
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+  await axios.post(
+    `${API}/api/tasks`,   // ✅ FIXED
+    { title },
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
 
-    setTitle("");
-    fetchTasks();
-  };
+  setTitle("");
+  fetchTasks();
+};
 
-  const toggleTask = async (id) => {
-    await axios.put(
-      `http://localhost:5000/api/tasks/${id}`,
-      {},
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+const toggleTask = async (id) => {
+  await axios.put(
+    `${API}/api/tasks/${id}`,   // ✅ FIXED
+    {},
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
 
-    fetchTasks();
-  };
+  fetchTasks();
+};
 
-  const deleteTask = async (id) => {
-    await axios.delete(
-      `http://localhost:5000/api/tasks/${id}`,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+const deleteTask = async (id) => {
+  await axios.delete(
+    `${API}/api/tasks/${id}`,   // ✅ FIXED
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
 
-    fetchTasks();
-  };
+  fetchTasks();
+};
+
 
   return (
     <div className="flex">

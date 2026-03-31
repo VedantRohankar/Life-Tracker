@@ -20,12 +20,9 @@ const Dashboard = () => {
     const fetchUser = async () => {
       const token = localStorage.getItem("token");
 
-      const res = await axios.get(
-        `${API}/api/user/profile`,
-        {
-          headers: { Authorization: `Bearer ${token}` }
-        }
-      );
+      const res = await axios.get(`${API}/api/user/profile`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
 
       setUser(res.data);
     };
@@ -33,11 +30,15 @@ const Dashboard = () => {
     fetchUser();
   }, []);
 
-  if (!user) return <h2 className="text-center mt-10">Loading...</h2>;
+  if (!user)
+    return (
+      <div className="flex items-center justify-center h-screen text-white bg-[#0b0b0c]">
+        Loading...
+      </div>
+    );
 
-  const xpData = user?.xpHistory
-    ?.slice(-7)
-    .map((item) => ({
+  const xpData =
+    user?.xpHistory?.slice(-7).map((item) => ({
       day: new Date(item.date).toLocaleDateString("en-US", {
         weekday: "short"
       }),
@@ -45,50 +46,55 @@ const Dashboard = () => {
     })) || [];
 
   return (
-    <div className="flex">
-  <Sidebar />
+    <div className="flex bg-[#0b0b0c] min-h-screen">
+      <Sidebar />
 
-  <motion.div
-    className="md:ml-64 w-full min-h-screen bg-[#0f0f0f] text-white p-6"
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-  >
-    <h1 className="text-3xl font-bold mb-1 tracking-tight">
-      XP Dashboard 📊
-    </h1>
-    <p className="text-gray-500 mb-6">
-      Track your growth over time
-    </p>
+      <motion.div
+        className="w-full md:ml-64 px-4 sm:px-6 md:px-10 py-6 text-white"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+      >
+        {/* HEADER */}
+        <div className="mb-6">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
+            XP Dashboard 📊
+          </h1>
+          <p className="text-gray-400 text-sm sm:text-base">
+            Track your growth over time 🚀
+          </p>
+        </div>
 
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      className="bg-[#18181b] border border-[#27272a] p-6 rounded-2xl shadow-lg"
-    >
-      <ResponsiveContainer width="100%" height={300}>
-        <LineChart data={xpData}>
-          <XAxis dataKey="day" stroke="#666" />
-          <YAxis stroke="#666" />
-          <Tooltip />
+        {/* CARD */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="bg-[#111113] border border-[#1f1f23] p-4 sm:p-6 rounded-2xl shadow-lg"
+        >
+          <div className="w-full h-[220px] sm:h-[300px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={xpData}>
+                <XAxis dataKey="day" stroke="#666" />
+                <YAxis stroke="#666" />
+                <Tooltip />
 
-          <Line
-            type="monotone"
-            dataKey="xp"
-            stroke="#22c55e"
-            strokeWidth={3}
-            dot={false}
-            activeDot={{ r: 6 }}
-          />
-        </LineChart>
-      </ResponsiveContainer>
-    </motion.div>
-
-  </motion.div>
-</div>
-
+                <Line
+                  type="monotone"
+                  dataKey="xp"
+                  stroke="#22c55e"
+                  strokeWidth={3}
+                  dot={false}
+                  activeDot={{ r: 6 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </motion.div>
+      </motion.div>
+    </div>
   );
 };
 
 export default Dashboard;
+
 

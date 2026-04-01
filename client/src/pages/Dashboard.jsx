@@ -5,12 +5,13 @@ import Sidebar from "../components/Sidebar";
 import API from "../api";
 
 import {
-  LineChart,
-  Line,
+  AreaChart,
+  Area,
   XAxis,
   YAxis,
   Tooltip,
-  ResponsiveContainer
+  ResponsiveContainer,
+  CartesianGrid
 } from "recharts";
 
 const Dashboard = () => {
@@ -18,13 +19,17 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const token = localStorage.getItem("token");
+      try {
+        const token = localStorage.getItem("token");
 
-      const res = await axios.get(`${API}/api/user/profile`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+        const res = await axios.get(`${API}/api/user/profile`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
 
-      setUser(res.data);
+        setUser(res.data);
+      } catch (err) {
+        console.error("Error fetching user:", err);
+      }
     };
 
     fetchUser();
@@ -73,20 +78,32 @@ const Dashboard = () => {
         >
           <div className="w-full h-[220px] sm:h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={xpData}>
+              <AreaChart data={xpData}>
+                
+                {/* Gradient */}
+                <defs>
+                  <linearGradient id="colorXp" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#22c55e" stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor="#22c55e" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+
+                <CartesianGrid strokeDasharray="3 3" stroke="#222" />
+
                 <XAxis dataKey="day" stroke="#666" />
                 <YAxis stroke="#666" />
                 <Tooltip />
 
-                <Line
+                <Area
                   type="monotone"
                   dataKey="xp"
                   stroke="#22c55e"
                   strokeWidth={3}
+                  fill="url(#colorXp)"
                   dot={false}
                   activeDot={{ r: 6 }}
                 />
-              </LineChart>
+              </AreaChart>
             </ResponsiveContainer>
           </div>
         </motion.div>
@@ -96,5 +113,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
-

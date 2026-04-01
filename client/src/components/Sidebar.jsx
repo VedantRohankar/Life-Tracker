@@ -10,27 +10,32 @@ import {
   FaTrophy,
   FaTasks
 } from "react-icons/fa";
+import API from "../api"; // ✅ FIXED
 
 const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
   const [user, setUser] = useState(null);
-  const [isOpen, setIsOpen] = useState(false); // 🔥 mobile toggle
+  const [isOpen, setIsOpen] = useState(false);
 
   // 🧑 Fetch user
   useEffect(() => {
     const fetchUser = async () => {
-      const token = localStorage.getItem("token");
+      try {
+        const token = localStorage.getItem("token");
 
-      const res = await axios.get(
-        "http://localhost:5000/api/user/profile",
-        {
-          headers: { Authorization: `Bearer ${token}` }
-        }
-      );
+        const res = await axios.get(
+          `${API}/api/user/profile`, // ✅ FIXED
+          {
+            headers: { Authorization: `Bearer ${token}` }
+          }
+        );
 
-      setUser(res.data);
+        setUser(res.data);
+      } catch (err) {
+        console.log("User fetch error");
+      }
     };
 
     fetchUser();
@@ -54,10 +59,10 @@ const Sidebar = () => {
 
   return (
     <>
-      {/* ☰ Hamburger Button (Mobile Only) */}
+      {/* ☰ HAMBURGER (ALWAYS ON TOP) */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed top-4 left-4 z-50 md:hidden 
+        className="fixed top-4 left-4 z-[100] md:hidden 
         bg-[#18181b] p-2 rounded-lg text-white shadow-lg"
       >
         <div className="flex flex-col gap-[4px]">
@@ -65,40 +70,40 @@ const Sidebar = () => {
             className={`w-5 h-[2px] bg-white transition ${
               isOpen ? "rotate-45 translate-y-[6px]" : ""
             }`}
-          ></span>
+          />
           <span
             className={`w-5 h-[2px] bg-white transition ${
               isOpen ? "opacity-0" : ""
             }`}
-          ></span>
+          />
           <span
             className={`w-5 h-[2px] bg-white transition ${
               isOpen ? "-rotate-45 -translate-y-[6px]" : ""
             }`}
-          ></span>
+          />
         </div>
       </button>
 
-      {/* 🌑 Overlay */}
+      {/* 🌑 OVERLAY */}
       {isOpen && (
         <div
           onClick={() => setIsOpen(false)}
-          className="fixed inset-0 bg-black/50 z-30 md:hidden"
+          className="fixed inset-0 bg-black/60 z-[90] md:hidden"
         />
       )}
 
-      {/* 📦 Sidebar */}
+      {/* 📦 SIDEBAR */}
       <div
         className={`fixed top-0 left-0 h-screen w-64 
         bg-[#0f0f0f] border-r border-[#1f1f23] 
         text-white p-5 flex flex-col justify-between
-        transform transition-transform duration-300 z-40
+        transform transition-transform duration-300 z-[95]
 
         ${isOpen ? "translate-x-0" : "-translate-x-full"}
         md:translate-x-0`}
       >
 
-        {/* 🔝 Top Section */}
+        {/* 🔝 TOP */}
         <div>
           <div className="mb-10">
 
@@ -107,7 +112,7 @@ const Sidebar = () => {
               <div className="w-10 h-10 rounded-full 
               bg-gradient-to-tr from-green-400 to-emerald-600 
               flex items-center justify-center font-bold">
-                {user?.username?.charAt(0).toUpperCase()}
+                {user?.username?.charAt(0)?.toUpperCase() || "U"}
               </div>
 
               <div>
@@ -124,7 +129,7 @@ const Sidebar = () => {
             </h2>
           </div>
 
-          {/* 📌 Menu */}
+          {/* 📌 MENU */}
           <ul className="space-y-2">
             {menu.map((item, index) => {
               const isActive = location.pathname === item.path;
@@ -133,12 +138,11 @@ const Sidebar = () => {
                 <Link
                   to={item.path}
                   key={index}
-                  onClick={() => setIsOpen(false)} // 🔥 close on mobile
+                  onClick={() => setIsOpen(false)}
                 >
                   <motion.li
-                    whileHover={{ scale: 1.04 }}
-                    transition={{ type: "spring", stiffness: 200 }}
-                    className={`relative flex items-center gap-3 p-3 rounded-xl transition-all duration-300
+                    whileHover={{ scale: 1.03 }}
+                    className={`relative flex items-center gap-3 p-3 rounded-xl transition
                     ${
                       isActive
                         ? "text-green-400 bg-[#18181b]"
@@ -149,9 +153,7 @@ const Sidebar = () => {
                       <div className="absolute left-0 top-0 h-full w-1 bg-green-500 rounded-r-full" />
                     )}
 
-                    <span className="text-lg opacity-80">
-                      {item.icon}
-                    </span>
+                    <span className="text-lg">{item.icon}</span>
                     <span>{item.name}</span>
                   </motion.li>
                 </Link>
@@ -160,16 +162,13 @@ const Sidebar = () => {
           </ul>
         </div>
 
-        {/* 🔻 Bottom Section */}
+        {/* 🔻 BOTTOM */}
         <div>
-          {/* 🚪 Logout */}
           <motion.button
             onClick={handleLogout}
-            whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="w-full flex items-center gap-3 p-3 rounded-xl
-            text-red-400 bg-[#18181b] hover:bg-red-500/10
-            transition-all duration-300"
+            text-red-400 bg-[#18181b] hover:bg-red-500/10"
           >
             <FaSignOutAlt />
             <span>Logout</span>
@@ -185,6 +184,3 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
-
-
-

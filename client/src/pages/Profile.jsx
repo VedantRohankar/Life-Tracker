@@ -70,14 +70,15 @@ const Profile = () => {
   if (!user) return null;
 
   return (
-    <div className="flex">
+    <div className="flex flex-col md:flex-row bg-[#0b0b0c] min-h-screen">
       <Sidebar />
 
       <motion.div
-        className="md:ml-64 w-full min-h-screen bg-[#0b0b0c] text-white p-4 md:p-8"
+        className="w-full md:ml-64 px-4 sm:px-6 md:px-10 py-6 text-white overflow-x-hidden bg-[#0b0b0c] text-white p-4 md:p-8"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       >
+        <div className="max-w-screen-xl mx-auto">
         {/* 🔝 HEADER */}
         <div className="flex flex-col md:flex-row items-center gap-6 mb-10">
 
@@ -195,7 +196,7 @@ const Profile = () => {
             />
           </div>
         </div>
-
+            </div>
       </motion.div>
     </div>
   );

@@ -19,11 +19,12 @@ const Progress = () => {
   if (!user) return null;
 
   return (
-    <div className="flex">
+    <div className="flex flex-col md:flex-row bg-[#0b0b0c] min-h-screen">
       <Sidebar />
 
-      <div className="md:ml-64 w-full min-h-screen bg-[#0f0f0f] p-6 text-white">
+      <div className="w-full md:ml-64 px-4 sm:px-6 md:px-10 py-6 text-white overflow-x-hidden bg-[#0f0f0f] p-6 text-white">
 
+       <div className="max-w-screen-xl mx-auto">
         <h1 className="text-3xl font-bold mb-1 tracking-tight">
           🎮 Progress
         </h1>
@@ -82,6 +83,7 @@ const Progress = () => {
 
         </motion.div>
 
+      </div>
       </div>
     </div>
   );

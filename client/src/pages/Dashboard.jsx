@@ -113,14 +113,17 @@ const getMessage = () => {
 
 
   return (
-    <div className="flex bg-[#0b0b0c] min-h-screen">
+    <div className="flex flex-col md:flex-row bg-[#0b0b0c] min-h-screen">
+
       <Sidebar />
 
       <motion.div
-        className="w-full md:ml-64 px-4 sm:px-6 md:px-10 py-6 text-white"
+  className="w-full md:ml-64 px-4 sm:px-6 md:px-10 py-6 text-white overflow-x-hidden"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       >
+        <div className="max-w-screen-xl mx-auto">
+
         {/* HEADER */}
         <div className="mb-6">
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
@@ -202,9 +205,9 @@ const getMessage = () => {
 
 </div>
 
-          <div className="w-full h-[220px] sm:h-[300px]">
-          
-            <ResponsiveContainer width="100%" height="100%">
+         <div className="w-full h-[220px] sm:h-[300px] overflow-hidden">
+            <ResponsiveContainer width="99%" height="100%">
+
               
               <AreaChart data={xpData}>
                 
@@ -248,7 +251,7 @@ const getMessage = () => {
     🧠 Growth Metrics
   </h2>
 
-  <ResponsiveContainer width="100%" height={300}>
+  <ResponsiveContainer width="100%" height={260}>
   <PieChart>
 
     <defs>
@@ -336,7 +339,7 @@ const getMessage = () => {
 
 
 </motion.div>
-
+</div>
       </motion.div>
     </div>
   );

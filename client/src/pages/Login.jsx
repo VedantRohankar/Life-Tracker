@@ -42,37 +42,74 @@ const Login = () => {
   };
 
   return (
-  <div className="flex items-center justify-center h-screen bg-gray-100">
-    <div className="bg-white p-6 rounded-xl shadow-md w-80">
+  <div className="flex items-center justify-center min-h-screen 
+  bg-[#0b0b0c] px-4 relative overflow-hidden">
+
+    {/* 🌌 Background Glow */}
+    <div className="absolute w-[500px] h-[500px] bg-green-500/20 
+    blur-[120px] rounded-full top-[-100px] left-[-100px]" />
+
+    <div className="absolute w-[400px] h-[400px] bg-emerald-500/10 
+    blur-[100px] rounded-full bottom-[-100px] right-[-100px]" />
+
+    {/* 🧊 Glass Card */}
+    <div className="relative z-10 w-full max-w-sm 
+    bg-[#111113]/80 backdrop-blur-xl 
+    border border-[#1f1f23] 
+    p-6 rounded-2xl shadow-xl">
 
       <form onSubmit={handleSubmit}>
-        <h2 className="text-2xl font-bold mb-4 text-center">Login</h2>
+        
+        {/* 🔥 Title */}
+        <h2 className="text-2xl font-bold text-center mb-1 text-white">
+          Welcome Back 👋
+        </h2>
 
+        <p className="text-gray-400 text-center text-sm mb-6">
+          Login to continue your journey 🚀
+        </p>
+
+        {/* 📧 Email */}
         <input
           type="email"
           name="email"
           placeholder="Email"
           onChange={handleChange}
-          className="w-full mb-3 p-2 border rounded"
+          className="w-full mb-4 p-3 
+          bg-[#18181b] border border-[#27272a] 
+          rounded-xl text-white placeholder-gray-500
+          focus:outline-none focus:ring-2 focus:ring-green-500"
         />
 
+        {/* 🔒 Password */}
         <input
           type="password"
           name="password"
           placeholder="Password"
           onChange={handleChange}
-          className="w-full mb-3 p-2 border rounded"
+          className="w-full mb-4 p-3 
+          bg-[#18181b] border border-[#27272a] 
+          rounded-xl text-white placeholder-gray-500
+          focus:outline-none focus:ring-2 focus:ring-green-500"
         />
 
-        <button className="w-full bg-blue-500 text-white p-2 rounded">
+        {/* 🚀 Button */}
+        <button
+          className="w-full bg-green-500 hover:bg-green-600 
+          transition p-3 rounded-xl font-semibold 
+          shadow-lg shadow-green-500/20"
+        >
           Login
         </button>
       </form>
 
-      {/* 🔗 Signup Redirect */}
-      <p className="text-sm text-center mt-4">
+      {/* 🔗 Signup */}
+      <p className="text-sm text-center mt-5 text-gray-400">
         Don’t have an account?{" "}
-        <Link to="/signup" className="text-blue-500 font-semibold">
+        <Link
+          to="/signup"
+          className="text-green-400 font-semibold hover:underline"
+        >
           Signup
         </Link>
       </p>
@@ -80,6 +117,7 @@ const Login = () => {
     </div>
   </div>
 );
+
 
 
 };

@@ -36,55 +36,95 @@ const Signup = () => {
     }
   };
 
-  return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
-      <div className="bg-white p-6 rounded-xl shadow-md w-80">
+return (
+  <div className="flex items-center justify-center min-h-screen 
+  bg-[#0b0b0c] px-4 relative overflow-hidden">
 
-        <h2 className="text-2xl font-bold mb-4 text-center">
-          Create Account
-        </h2>
+    {/* 🌌 Background Glow */}
+    <div className="absolute w-[500px] h-[500px] bg-green-500/20 
+    blur-[120px] rounded-full top-[-100px] left-[-100px]" />
 
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="username"
-            placeholder="Username"
-            onChange={handleChange}
-            className="w-full mb-3 p-2 border rounded"
-          />
+    <div className="absolute w-[400px] h-[400px] bg-emerald-500/10 
+    blur-[100px] rounded-full bottom-[-100px] right-[-100px]" />
 
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            onChange={handleChange}
-            className="w-full mb-3 p-2 border rounded "
-          />
+    {/* 🧊 Glass Card */}
+    <div className="relative z-10 w-full max-w-sm 
+    bg-[#111113]/80 backdrop-blur-xl 
+    border border-[#1f1f23] 
+    p-6 rounded-2xl shadow-xl">
 
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            onChange={handleChange}
-            className="w-full mb-4 p-2 border rounded"
-          />
+      {/* 🔥 Title */}
+      <h2 className="text-2xl font-bold text-center mb-1 text-white">
+        Create Account 🚀
+      </h2>
 
-          <button className="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600 transition">
-            Signup
-          </button>
-        </form>
+      <p className="text-gray-400 text-center text-sm mb-6">
+        Start your journey today 💪
+      </p>
 
-        {/* 🔗 Login Redirect */}
-        <p className="text-sm text-center mt-4">
-          Already have an account?{" "}
-          <Link to="/" className="text-blue-500 font-semibold">
-            Login
-          </Link>
-        </p>
+      <form onSubmit={handleSubmit}>
+        
+        {/* 👤 Username */}
+        <input
+          type="text"
+          name="username"
+          placeholder="Username"
+          onChange={handleChange}
+          className="w-full mb-4 p-3 
+          bg-[#18181b] border border-[#27272a] 
+          rounded-xl text-white placeholder-gray-500
+          focus:outline-none focus:ring-2 focus:ring-green-500"
+        />
 
-      </div>
+        {/* 📧 Email */}
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          onChange={handleChange}
+          className="w-full mb-4 p-3 
+          bg-[#18181b] border border-[#27272a] 
+          rounded-xl text-white placeholder-gray-500
+          focus:outline-none focus:ring-2 focus:ring-green-500"
+        />
+
+        {/* 🔒 Password */}
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          onChange={handleChange}
+          className="w-full mb-5 p-3 
+          bg-[#18181b] border border-[#27272a] 
+          rounded-xl text-white placeholder-gray-500
+          focus:outline-none focus:ring-2 focus:ring-green-500"
+        />
+
+        {/* 🚀 Button */}
+        <button
+          className="w-full bg-green-500 hover:bg-green-600 
+          transition p-3 rounded-xl font-semibold 
+          shadow-lg shadow-green-500/20"
+        >
+          Signup
+        </button>
+      </form>
+
+      {/* 🔗 Login Redirect */}
+      <p className="text-sm text-center mt-5 text-gray-400">
+        Already have an account?{" "}
+        <Link
+          to="/"
+          className="text-green-400 font-semibold hover:underline"
+        >
+          Login
+        </Link>
+      </p>
+
     </div>
-  );
+  </div>
+);
+
 };
 
 export default Signup;

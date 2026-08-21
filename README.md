@@ -6,6 +6,8 @@ The application combines a modern dark dashboard with a REST API backend and JWT
 
 🌐 Live Demo
 
+Live: https://life-tracker-wheat.vercel.app/
+
 Frontend: https://life-tracker-7vigrhf60-vedantrohankars-projects.vercel.app/
 
 Backend API: https://life-tracker-api-vjxy.onrender.com/
